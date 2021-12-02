@@ -9,4 +9,10 @@ class Day2Test {
         val instructions = fileToArr("day2_1.txt")
         day2Part1(instructions)
     }
+
+    @Test
+    fun testDay2Part2() {
+        val instructions = fileToArr("day2_1.txt")
+        day2Part2(instructions)
+    }
 }

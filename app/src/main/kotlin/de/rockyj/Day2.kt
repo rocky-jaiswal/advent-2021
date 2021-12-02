@@ -8,6 +8,12 @@ class Submarine(var x: Long, var y: Long) {
     }
 }
 
+class SubmarineWithAim(var x: Long, var y: Long, var aim: Long) {
+    override fun toString(): String {
+        return "${this.x}, ${this.y} -> ${this.aim}"
+    }
+}
+
 enum class Directions {
     FORWARD, DOWN, UP
 }
@@ -16,9 +22,10 @@ fun main() {
     val instructions = fileToArr("day2_1.txt")
 
     day2Part1(instructions)
+    day2Part2(instructions)
 }
 
-fun applyInstructions(sub: Submarine, parsedInstructions: List<Pair<Directions, Long>>) {
+fun applyInstructionsForPart1(sub: Submarine, parsedInstructions: List<Pair<Directions, Long>>) {
     parsedInstructions.forEach { instruction ->
         when(instruction.first) {
             Directions.FORWARD -> sub.x = sub.x + instruction.second
@@ -44,8 +51,29 @@ fun day2Part1(instructions: List<String>) {
 
     val parsedInstructions = parseInstructions(instructions)
 
-    applyInstructions(sub, parsedInstructions)
+    applyInstructionsForPart1(sub, parsedInstructions)
     println(abs(sub.x) * abs(sub.y))
+}
+
+fun applyInstructionsForPart2(sub: SubmarineWithAim, parsedInstructions: List<Pair<Directions, Long>>) {
+    parsedInstructions.forEach { instruction ->
+        when(instruction.first) {
+            Directions.DOWN -> sub.aim = sub.aim + instruction.second
+            Directions.UP -> sub.aim = sub.aim - instruction.second
+            Directions.FORWARD -> {
+                sub.x = sub.x + instruction.second
+                sub.y = sub.y - (sub.aim * instruction.second)
+            }
+        }
+    }
+}
+
+fun day2Part2(instructions: List<String>) {
+    val subWithAim = SubmarineWithAim(0L, 0L, 0L)
+
+    val parsedInstructions = parseInstructions(instructions)
+    applyInstructionsForPart2(subWithAim, parsedInstructions)
+    println(abs(subWithAim.x) * abs(subWithAim.y))
 }
 
 
