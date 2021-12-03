@@ -67,15 +67,8 @@ const reduceNums2 = (nums: string[], pos: number) => {
 }
 
 const part2 = () => {
-  const numsIn = binaryArr
-  const posIn = 0
-
-  const res1 = reduceNums1(numsIn, posIn)
-
-  const numsIn2 = binaryArr
-  const posIn2 = 0
-
-  const res2 = reduceNums2(numsIn2, posIn2)
+  const res1 = reduceNums1(binaryArr, 0)
+  const res2 = reduceNums2(binaryArr, 0)
 
   const o2 = parseInt(res1.join(''), 2)
   const co2 = parseInt(res2.join(''), 2)
