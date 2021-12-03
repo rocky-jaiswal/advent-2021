@@ -2,4 +2,4 @@
 
 Solutions for https://adventofcode.com/2021
 
-Mostly in Kotlin
+Mostly in Kotlin / TS
