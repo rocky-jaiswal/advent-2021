@@ -1,5 +1,7 @@
 package de.rockyj
 
+import java.lang.Exception
+
 data class BoardItem(val location: Pair<Int, Int>, val value: Int, var marked: Boolean)
 data class BingoBoard(val id: Int, val boardItems: List<BoardItem>)
 data class RawBoard(var boardItems: List<String>) {
@@ -36,7 +38,7 @@ fun buildBoards(boardsRaw: List<String>): List<BingoBoard> {
             in 10..14 -> 2
             in 15..19 -> 3
             in 20..24 -> 4
-            else -> 999
+            else -> throw Exception("Out of range!!")
         }
     }
 
@@ -73,7 +75,7 @@ fun columnMarked(marked: List<Pair<Int, Int>>): Boolean {
 }
 
 
-fun isWinner(boards: List<BingoBoard>): List<BingoBoard> {
+fun findWinners(boards: List<BingoBoard>): List<BingoBoard> {
     return boards.filter {
         val marked = it.boardItems.filter { item -> item.marked }.map { item -> item.location }
         rowMarked(marked) || columnMarked(marked)
@@ -87,10 +89,10 @@ fun day4Part1(bingo: List<String>) {
     for (num in calledNumbers) {
         val called = num.trim().toInt()
         markBoard(boards, called)
-        val winner = isWinner(boards)
-        if (winner.isNotEmpty()) {
+        val winners = findWinners(boards)
+        if (winners.isNotEmpty()) {
             println(called)
-            val unmarkedSum = winner.first().boardItems.filter { item -> !item.marked }.sumOf { it.value }
+            val unmarkedSum = winners.first().boardItems.filter { item -> !item.marked }.sumOf { it.value }
             println(called * unmarkedSum)
             break
         }
@@ -100,6 +102,7 @@ fun day4Part1(bingo: List<String>) {
 fun day4Part2(bingo: List<String>) {
     val calledNumbers = bingo[0].split(",")
     var boards = buildBoards(bingo.subList(2, bingo.size))
+
     var lastWinner: BingoBoard? = null
     var lastWinCall: Int? = null
 
@@ -107,7 +110,7 @@ fun day4Part2(bingo: List<String>) {
         val called = num.trim().toInt()
         markBoard(boards, called)
 
-        val winners = isWinner(boards)
+        val winners = findWinners(boards)
 
         if (winners.isNotEmpty()) {
             boards = boards.filter { !winners.map { win -> win.id }.contains(it.id) }
